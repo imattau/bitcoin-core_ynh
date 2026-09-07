@@ -5,6 +5,7 @@ id = "bitcoin_core"
 name = "Bitcoin Core"
 description.en = "Headless Bitcoin Core node and local RPC backend"
 description.fr = "Nœud Bitcoin Core sans interface graphique et backend RPC local"
+category = "utilities"
 version = "31.1~ynh1"
 maintainers = ["bitcoin_core_ynh contributors"]
 

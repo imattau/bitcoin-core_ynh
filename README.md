@@ -1,5 +1,7 @@
 # Bitcoin Core for YunoHost
 
+[![Integration level](https://dash.yunohost.org/integration/bitcoin_core.svg)](https://dash.yunohost.org/appci/app/bitcoin_core)
+
 Headless Bitcoin Core packaging for YunoHost. The package provides `bitcoind`
 as a shared local service for applications such as Core Lightning, BTCPay and
 explorers; it does not provide a web UI or require a domain.

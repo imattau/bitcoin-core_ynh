@@ -1,0 +1,37 @@
+#!/bin/bash
+
+source "$(dirname "$0")/_common.sh"
+source /usr/share/yunohost/helpers
+
+ynh_abort_if_errors
+
+get__pruning() {
+	ynh_app_setting_get --app="$app" --key=pruning
+}
+
+set__pruning() {
+	ynh_app_setting_set --app="$app" --key=pruning --value="$pruning"
+	ynh_bitcoin_write_config
+	ynh_exec_warn_less systemctl restart "$service_name.service"
+}
+
+get__p2p_incoming() {
+	ynh_app_setting_get --app="$app" --key=p2p_incoming
+}
+
+set__p2p_incoming() {
+	ynh_app_setting_set --app="$app" --key=p2p_incoming --value="$p2p_incoming"
+	ynh_bitcoin_write_config
+	ynh_exec_warn_less systemctl restart "$service_name.service"
+}
+
+get__status() {
+	if ynh_bitcoin_healthcheck 2>/dev/null; then
+		echo "RPC OK. Initial synchronization may still be in progress."
+	else
+		echo "RPC unavailable. Check the Bitcoin Core service logs."
+	fi
+}
+
+ynh_app_config_run "$1"
+

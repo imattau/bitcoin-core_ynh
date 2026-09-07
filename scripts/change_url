@@ -1,0 +1,7 @@
+#!/bin/bash
+set -eu
+source /usr/share/yunohost/helpers
+
+# This is intentionally a no-op: bitcoin-core_ynh has no domain or URL.
+ynh_print_info "Bitcoin Core is a headless service and has no URL to change."
+

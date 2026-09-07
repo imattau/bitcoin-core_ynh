@@ -14,11 +14,10 @@ chmod 750 "$data_dir"
 ynh_bitcoin_write_config
 
 ynh_script_progression "Registering Bitcoin Core service..."
-yunohost service add "$service_name" --description="Bitcoin Core headless node" --log=systemd || true
+yunohost service add "$service_name" --description="Bitcoin Core headless node"
 ynh_config_add_systemd
 
 ynh_script_progression "Starting Bitcoin Core..."
 ynh_systemctl --service="$service_name" --action=start --log_path=systemd --timeout=60
 ynh_bitcoin_healthcheck || ynh_die "Bitcoin Core RPC did not become available"
 ynh_print_info "Initial blockchain synchronization has started; installation does not wait for IBD to finish."
-
