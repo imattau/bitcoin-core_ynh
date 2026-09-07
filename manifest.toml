@@ -39,6 +39,12 @@ ram.runtime = "2G"
     default = true
     help.en = "Allow inbound peer connections on the Bitcoin P2P port. Outgoing connections remain enabled either way."
 
+    [install.start_sync]
+    ask.en = "Start blockchain synchronization immediately?"
+    type = "boolean"
+    default = true
+    help.en = "If disabled, Bitcoin Core is installed but remains stopped. Start it later from the YunoHost Config Panel when storage and bandwidth are ready."
+
 [resources]
     [resources.sources.main]
     url = "https://bitcoincore.org/bin/bitcoin-core-31.1/bitcoin-31.1-x86_64-linux-gnu.tar.gz"

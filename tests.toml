@@ -5,8 +5,8 @@ test_format = 1.0
     [default.install]
     args.pruning = "pruned-10G"
     args.p2p_incoming = false
+    args.start_sync = false
 
     [default.curl_tests]
     # Headless service: there is intentionally no HTTP endpoint or domain.
     exclude = true
-

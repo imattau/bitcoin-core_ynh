@@ -14,6 +14,8 @@ explorers; it does not provide a web UI or require a domain.
 - RPC bound to `127.0.0.1:8332`; P2P uses the allocated port (8333 by default).
 - Blockchain data is kept in YunoHost's `data_dir`, separate from binaries.
 - Installation starts initial block download and does not wait for completion.
+- Synchronization can be deferred at install time and started later from the
+  YunoHost Config Panel.
 - Backups include configuration and wallet data only, never blocks or chainstate.
 
 This is an initial package scaffold. RPC application credentials, richer

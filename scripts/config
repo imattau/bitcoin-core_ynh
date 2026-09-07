@@ -25,13 +25,35 @@ set__p2p_incoming() {
 	ynh_exec_warn_less systemctl restart "$service_name.service"
 }
 
+get__start_sync() {
+	local value
+	value="$(ynh_app_setting_get --app="$app" --key=start_sync 2>/dev/null || true)"
+	echo "${value:-1}"
+}
+
+set__start_sync() {
+	ynh_app_setting_set --app="$app" --key=start_sync --value="$start_sync"
+	if [ "$start_sync" -eq 1 ]; then
+		ynh_exec_warn_less systemctl start "$service_name.service"
+	else
+		ynh_exec_warn_less systemctl stop "$service_name.service"
+	fi
+}
+
+run__start_sync_now() {
+	ynh_app_setting_set --app="$app" --key=start_sync --value=1
+	ynh_exec_warn_less systemctl start "$service_name.service"
+	ynh_bitcoin_healthcheck || ynh_die "Bitcoin Core RPC did not become available after starting synchronization"
+	ynh_print_info "Bitcoin Core is running and initial blockchain synchronization is continuing in the background."
+}
+
 get__status() {
 	if ynh_bitcoin_healthcheck 2>/dev/null; then
-		echo "RPC OK. Initial synchronization may still be in progress."
+		echo "RPC OK"
+		"$bitcoin_cli" -conf="$config_file" -datadir="$data_dir" getblockchaininfo 2>/dev/null || true
 	else
-		echo "RPC unavailable. Check the Bitcoin Core service logs."
+		echo "RPC unavailable. Synchronization has not started or the service needs attention."
 	fi
 }
 
 ynh_app_config_run "$1"
-

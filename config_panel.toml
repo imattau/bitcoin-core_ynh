@@ -28,9 +28,24 @@ services = ["__APP__"]
         default = true
         bind = "null"
 
+        [node.settings.start_sync]
+        ask.en = "Synchronization enabled"
+        ask.fr = "Synchronisation activée"
+        type = "boolean"
+        default = true
+        bind = "null"
+        help.en = "When disabled, Bitcoin Core remains stopped and does not download the blockchain. Enabling this starts synchronization."
+
+        [node.settings.start_sync_now]
+        ask.en = "Start Bitcoin synchronization now"
+        ask.fr = "Démarrer maintenant la synchronisation Bitcoin"
+        type = "button"
+        style = "success"
+        bind = "null"
+        help.en = "Starts bitcoind and begins initial blockchain synchronization. Installation does not wait for synchronization to finish."
+
         [node.settings.status]
         ask.en = "Current node status"
         ask.fr = "État actuel du nœud"
         type = "alert"
         style = "info"
-
