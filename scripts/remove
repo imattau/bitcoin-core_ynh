@@ -7,6 +7,6 @@ ynh_script_progression "Stopping Bitcoin Core cleanly..."
 ynh_systemctl --service="$service_name" --action=stop --log_path=systemd --timeout=600 || true
 ynh_script_progression "Removing Bitcoin Core service and data..."
 yunohost service remove "$service_name" || true
-ynh_config_rm_systemd
+ynh_config_rm_systemd || true
 ynh_safe_rm "$config_dir"
 # data_dir is removed by YunoHost's data resource lifecycle.

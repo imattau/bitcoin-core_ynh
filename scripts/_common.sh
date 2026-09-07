@@ -44,8 +44,8 @@ ynh_bitcoin_write_config() {
 }
 
 ynh_bitcoin_unpack() {
-	local archive="$install_dir/bitcoin-31.1-x86_64-linux-gnu.tar.gz"
-	[ -f "$archive" ] || archive="$install_dir/bitcoin-31.1-aarch64-linux-gnu.tar.gz"
+	local archive="$install_dir/bitcoin-core.tar.gz"
+	[ -f "$archive" ] || ynh_die "Bitcoin Core source archive was not downloaded to $archive"
 	tar -xzf "$archive" -C "$install_dir"
 	rm -f "$archive"
 	[ -x "$bitcoin_bin" ] || ynh_die "Bitcoin Core archive did not contain $bitcoin_bin"
