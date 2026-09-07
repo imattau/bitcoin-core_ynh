@@ -10,8 +10,8 @@ ynh_systemctl --service="$service_name" --action=stop --log_path=systemd --timeo
 ynh_script_progression "Replacing Bitcoin Core binaries..."
 ynh_bitcoin_unpack
 ynh_bitcoin_write_config
+yunohost service add "$service_name" --description="Bitcoin Core headless node"
 ynh_config_add_systemd
 ynh_script_progression "Starting upgraded Bitcoin Core..."
 ynh_systemctl --service="$service_name" --action=start --log_path=systemd --timeout=60
 ynh_bitcoin_healthcheck || ynh_die "Bitcoin Core RPC health check failed after upgrade; data was not rolled back"
-

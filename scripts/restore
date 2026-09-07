@@ -11,3 +11,5 @@ fi
 ynh_restore "/etc/systemd/system/$service_name.service"
 chown root:"$app" "$config_file"
 chmod 640 "$config_file"
+yunohost service add "$service_name" --description="Bitcoin Core headless node"
+ynh_config_add_systemd
