@@ -11,6 +11,7 @@ ynh_script_progression "Preparing Bitcoin Core data and configuration..."
 mkdir -p "$data_dir" "$data_dir/wallets"
 chown -R "$app:$app" "$data_dir"
 chmod 750 "$data_dir"
+ynh_bitcoin_ensure_cln_credential
 ynh_app_setting_set --app="$app" --key=pruning --value="${pruning:-pruned-25G}"
 ynh_app_setting_set --app="$app" --key=p2p_incoming --value="${p2p_incoming:-1}"
 ynh_app_setting_set --app="$app" --key=start_sync --value="${start_sync:-1}"

@@ -9,6 +9,7 @@ ynh_script_progression "Stopping Bitcoin Core for a clean upgrade..."
 ynh_systemctl --service="$service_name" --action=stop --log_path=systemd --timeout=600
 ynh_script_progression "Replacing Bitcoin Core binaries..."
 ynh_bitcoin_unpack
+ynh_bitcoin_ensure_cln_credential
 ynh_bitcoin_write_config
 yunohost service add "$service_name" --description="Bitcoin Core headless node"
 ynh_config_add_systemd

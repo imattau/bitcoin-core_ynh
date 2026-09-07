@@ -8,6 +8,7 @@ data_dir="${data_dir:-/home/yunohost.app/$app}"
 service_name="$app"
 config_dir="/etc/$app"
 config_file="$config_dir/bitcoin.conf"
+cln_credential_file="$config_dir/core-lightning.rpc"
 bitcoin_bin="$install_dir/bitcoin-31.1/bin/bitcoind"
 bitcoin_cli="$install_dir/bitcoin-31.1/bin/bitcoin-cli"
 
@@ -38,9 +39,28 @@ ynh_bitcoin_write_config() {
 		echo "rpcallowip=127.0.0.1"
 		echo "rpcport=8332"
 		[ "$prune_mb" -gt 0 ] && echo "prune=$prune_mb"
+		if [ -s "$cln_credential_file" ]; then
+			# Bitcoin Core has no method-level RPC ACLs. This is a dedicated
+			# service credential, kept separate from the cookie and admin config.
+			printf 'rpcuser=%s\n' "$(sed -n 's/^user=//p' "$cln_credential_file")"
+			printf 'rpcpassword=%s\n' "$(sed -n 's/^password=//p' "$cln_credential_file")"
+		fi
 	} > "$config_file"
 	chown root:"$app" "$config_file"
 	chmod 640 "$config_file"
+}
+
+ynh_bitcoin_ensure_cln_credential() {
+	local password
+	if [ ! -s "$cln_credential_file" ]; then
+		password="$(ynh_string_random --length=48)"
+		install -m 0600 -o root -g root /dev/null "$cln_credential_file"
+		{
+			echo "user=core_lightning"
+			echo "password=$password"
+		} > "$cln_credential_file"
+	fi
+	chmod 0600 "$cln_credential_file"
 }
 
 ynh_bitcoin_unpack() {

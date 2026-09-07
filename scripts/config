@@ -11,6 +11,7 @@ get__pruning() {
 
 set__pruning() {
 	ynh_app_setting_set --app="$app" --key=pruning --value="$pruning"
+	ynh_bitcoin_ensure_cln_credential
 	ynh_bitcoin_write_config
 	ynh_exec_warn_less systemctl restart "$service_name.service"
 }
@@ -21,6 +22,7 @@ get__p2p_incoming() {
 
 set__p2p_incoming() {
 	ynh_app_setting_set --app="$app" --key=p2p_incoming --value="$p2p_incoming"
+	ynh_bitcoin_ensure_cln_credential
 	ynh_bitcoin_write_config
 	ynh_exec_warn_less systemctl restart "$service_name.service"
 }

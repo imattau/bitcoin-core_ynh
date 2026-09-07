@@ -12,14 +12,18 @@ explorers; it does not provide a web UI or require a domain.
 - Mainnet by default, with pruned 25 GB storage by default.
 - Wallet disabled by default (`disablewallet=1`).
 - RPC bound to `127.0.0.1:8332`; P2P uses the allocated port (8333 by default).
+- A dedicated `core_lightning` RPC credential is generated and stored in
+  `/etc/bitcoin_core/core-lightning.rpc`; Bitcoin Core does not provide
+  method-level RPC ACLs, so this is service-scoped authentication rather than
+  fine-grained authorization.
 - Blockchain data is kept in YunoHost's `data_dir`, separate from binaries.
 - Installation starts initial block download and does not wait for completion.
 - Synchronization can be deferred at install time and started later from the
   YunoHost Config Panel.
 - Backups include configuration and wallet data only, never blocks or chainstate.
 
-This is an initial package scaffold. RPC application credentials, richer
-diagnostics, regtest CI and Nostr Catalog publication are follow-up work.
+This is an initial package scaffold. Richer diagnostics, regtest CI and
+Nostr Catalog publication are follow-up work.
 
 ## Nostr Catalog readiness
 
