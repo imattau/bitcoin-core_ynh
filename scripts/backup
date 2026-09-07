@@ -1,0 +1,12 @@
+#!/bin/bash
+set -eu
+source /usr/share/yunohost/helpers
+source "$(dirname "$0")/_common.sh"
+
+# Only configuration and wallet state are backup material. Blockchain data is
+# intentionally excluded because it is reproducible and can be very large.
+ynh_backup "$config_dir"
+if [ -d "$data_dir/wallets" ]; then
+	ynh_backup "$data_dir/wallets"
+fi
+ynh_backup "/etc/systemd/system/$service_name.service"

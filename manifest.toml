@@ -1,0 +1,65 @@
+#:schema https://raw.githubusercontent.com/YunoHost/apps/main/schemas/manifest.v2.schema.json
+
+packaging_format = 2
+id = "bitcoin_core"
+name = "Bitcoin Core"
+description.en = "Headless Bitcoin Core node and local RPC backend"
+description.fr = "Nœud Bitcoin Core sans interface graphique et backend RPC local"
+version = "31.1~ynh1"
+maintainers = ["bitcoin_core_ynh contributors"]
+
+[upstream]
+license = "MIT"
+website = "https://bitcoincore.org/"
+code = "https://github.com/bitcoin/bitcoin"
+
+[integration]
+yunohost = ">= 12.0"
+helpers_version = "2.1"
+architectures = ["amd64", "arm64"]
+multi_instance = false
+ldap = false
+sso = false
+disk = "10G"
+ram.build = "50M"
+ram.runtime = "2G"
+
+[install]
+    [install.pruning]
+    ask.en = "Blockchain storage mode"
+    type = "select"
+    choices = ["pruned-10G", "pruned-25G", "pruned-50G", "pruned-100G", "full"]
+    default = "pruned-25G"
+    help.en = "Pruning limits retained blockchain data while still validating the chain. Full mode needs substantially more storage."
+
+    [install.p2p_incoming]
+    ask.en = "Accept incoming Bitcoin connections?"
+    type = "boolean"
+    default = true
+    help.en = "Allow inbound peer connections on the Bitcoin P2P port. Outgoing connections remain enabled either way."
+
+[resources]
+    [resources.sources.main]
+    url = "https://bitcoincore.org/bin/bitcoin-core-31.1/bitcoin-31.1-x86_64-linux-gnu.tar.gz"
+    sha256 = "b80d9c3e04da78fb6f0569685673418cf686fadba9042d926d13fb87ff503f9e"
+    format = "tar.gz"
+
+        [resources.sources.main.arm64]
+        url = "https://bitcoincore.org/bin/bitcoin-core-31.1/bitcoin-31.1-aarch64-linux-gnu.tar.gz"
+        sha256 = "dcf1873f2208ba4f962f3398d47e154c39c0084be8f4553e05c940d0ace3d004"
+
+    [resources.system_user]
+
+    [resources.install_dir]
+
+    # Blockchain, chainstate, indexes and optional wallets live here. The
+    # binary install directory is deliberately replaceable during upgrades.
+    [resources.data_dir]
+
+    [resources.apt]
+    packages = "ca-certificates"
+
+    [resources.ports]
+        [resources.ports.p2p]
+    default = 8333
+    exposed = true

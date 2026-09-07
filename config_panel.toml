@@ -1,0 +1,36 @@
+#:schema https://github.com/YunoHost/apps/raw/main/schemas/config_panel.v1.schema.json
+
+version = "1.0"
+
+[node]
+name.en = "Node settings"
+name.fr = "Paramètres du nœud"
+services = ["__APP__"]
+
+    [node.settings]
+    name.en = "Bitcoin Core settings"
+    name.fr = "Paramètres Bitcoin Core"
+    services = ["__APP__"]
+
+        [node.settings.pruning]
+        ask.en = "Blockchain storage mode"
+        ask.fr = "Mode de stockage de la blockchain"
+        type = "select"
+        choices = ["pruned-10G", "pruned-25G", "pruned-50G", "pruned-100G", "full"]
+        default = "pruned-25G"
+        bind = "null"
+        help.en = "Changing this setting rewrites bitcoin.conf and restarts the node. Pruning still validates the full chain."
+
+        [node.settings.p2p_incoming]
+        ask.en = "Accept incoming Bitcoin connections"
+        ask.fr = "Accepter les connexions Bitcoin entrantes"
+        type = "boolean"
+        default = true
+        bind = "null"
+
+        [node.settings.status]
+        ask.en = "Current node status"
+        ask.fr = "État actuel du nœud"
+        type = "alert"
+        style = "info"
+

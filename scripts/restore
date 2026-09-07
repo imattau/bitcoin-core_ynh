@@ -1,0 +1,13 @@
+#!/bin/bash
+set -eu
+source /usr/share/yunohost/helpers
+source "$(dirname "$0")/_common.sh"
+
+mkdir -p "$config_dir" "$data_dir/wallets"
+ynh_restore "$config_dir"
+if [ -d "$data_dir/wallets" ]; then
+	ynh_restore "$data_dir/wallets"
+fi
+ynh_restore "/etc/systemd/system/$service_name.service"
+chown root:"$app" "$config_file"
+chmod 640 "$config_file"
