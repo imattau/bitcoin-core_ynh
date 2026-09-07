@@ -50,6 +50,7 @@ ram.runtime = "2G"
     url = "https://bitcoincore.org/bin/bitcoin-core-31.1/bitcoin-31.1-x86_64-linux-gnu.tar.gz"
     sha256 = "b80d9c3e04da78fb6f0569685673418cf686fadba9042d926d13fb87ff503f9e"
     format = "tar.gz"
+    extract = false
 
         [resources.sources.main.arm64]
         url = "https://bitcoincore.org/bin/bitcoin-core-31.1/bitcoin-31.1-aarch64-linux-gnu.tar.gz"
