@@ -76,3 +76,15 @@ ynh_bitcoin_unpack() {
 ynh_bitcoin_healthcheck() {
 	"$bitcoin_cli" -conf="$config_file" -datadir="$data_dir" getnetworkinfo >/dev/null
 }
+
+ynh_bitcoin_wait_for_rpc() {
+	local timeout="${1:-60}"
+	local attempt
+	for ((attempt = 1; attempt <= timeout; attempt++)); do
+		if ynh_bitcoin_healthcheck >/dev/null 2>&1; then
+			return 0
+		fi
+		sleep 1
+	done
+	return 1
+}
