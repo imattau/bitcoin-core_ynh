@@ -9,6 +9,7 @@ ynh_bitcoin_unpack
 
 ynh_script_progression "Preparing Bitcoin Core data and configuration..."
 mkdir -p "$data_dir" "$data_dir/wallets"
+mkdir -p "$config_dir"
 chown -R "$app:$app" "$data_dir"
 chmod 750 "$data_dir"
 ynh_bitcoin_ensure_cln_credential
