@@ -13,7 +13,7 @@ set__pruning() {
 	ynh_app_setting_set --app="$app" --key=pruning --value="$pruning"
 	ynh_bitcoin_ensure_cln_credential
 	ynh_bitcoin_write_config
-	ynh_exec_warn_less systemctl restart "$service_name.service"
+	ynh_systemctl --service="$service_name" --action=restart
 }
 
 get__p2p_incoming() {
@@ -24,7 +24,7 @@ set__p2p_incoming() {
 	ynh_app_setting_set --app="$app" --key=p2p_incoming --value="$p2p_incoming"
 	ynh_bitcoin_ensure_cln_credential
 	ynh_bitcoin_write_config
-	ynh_exec_warn_less systemctl restart "$service_name.service"
+	ynh_systemctl --service="$service_name" --action=restart
 }
 
 get__start_sync() {
@@ -36,23 +36,28 @@ get__start_sync() {
 set__start_sync() {
 	ynh_app_setting_set --app="$app" --key=start_sync --value="$start_sync"
 	if [ "$start_sync" -eq 1 ]; then
-		ynh_exec_warn_less systemctl start "$service_name.service"
+		ynh_systemctl --service="$service_name" --action=start
 	else
-		ynh_exec_warn_less systemctl stop "$service_name.service"
+		ynh_systemctl --service="$service_name" --action=stop
 	fi
 }
 
 run__start_sync_now() {
 	ynh_app_setting_set --app="$app" --key=start_sync --value=1
-	ynh_exec_warn_less systemctl start "$service_name.service"
+	ynh_systemctl --service="$service_name" --action=start
 	ynh_bitcoin_wait_for_rpc 60 || ynh_die "Bitcoin Core RPC did not become available after starting synchronization"
 	ynh_print_info "Bitcoin Core is running and initial blockchain synchronization is continuing in the background."
 }
 
 get__status() {
+	local info summary
 	if ynh_bitcoin_healthcheck 2>/dev/null; then
-		echo "RPC OK"
-		"$bitcoin_cli" -conf="$config_file" -datadir="$data_dir" getblockchaininfo 2>/dev/null || true
+		info="$($bitcoin_cli -conf="$config_file" -datadir="$data_dir" getblockchaininfo 2>/dev/null || true)"
+		if summary="$(printf '%s' "$info" | jq -er '. as $i | "RPC OK; chain=" + ($i.chain // "unknown") + "; blocks=" + (($i.blocks // 0) | tostring) + "; headers=" + (($i.headers // 0) | tostring) + "; verificationprogress=" + (($i.verificationprogress // 0) | tostring) + "; initialblockdownload=" + (($i.initialblockdownload // false) | tostring)' 2>/dev/null)"; then
+			echo "$summary"
+		else
+			echo "RPC OK; blockchain details unavailable"
+		fi
 	else
 		echo "RPC unavailable. Synchronization has not started or the service needs attention."
 	fi
