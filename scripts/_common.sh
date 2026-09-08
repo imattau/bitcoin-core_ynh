@@ -69,8 +69,10 @@ ynh_bitcoin_unpack() {
 	tar -xzf "$archive" -C "$install_dir"
 	rm -f "$archive"
 	[ -x "$bitcoin_bin" ] || ynh_die "Bitcoin Core archive did not contain $bitcoin_bin"
-	chown -R root:root "$install_dir"
-	chmod -R o-rwx "$install_dir"
+	# Keep the binaries owned by root while granting the service account's
+	# group the read/execute access required by systemd.
+	chown -R root:"$app" "$install_dir"
+	chmod -R u=rwX,g=rX,o=--- "$install_dir"
 }
 
 ynh_bitcoin_healthcheck() {
